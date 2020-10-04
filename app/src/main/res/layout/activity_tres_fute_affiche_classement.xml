@@ -5,16 +5,36 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#333333"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     tools:context=".tresfute.TresFuteAfficheClassement"
     android:baselineAligned="false">
 
     <TextView
-        android:id="@+id/classement_complet"
+        android:id="@+id/titre_classement"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:textAlignment="center"
+        android:textColor="@color/blanc"
+        android:text="@string/meilleurs_scores"
+        android:drawableBottom="@drawable/divider"
+        android:textSize="30sp"/>
+
+    <LinearLayout
+        android:id="@+id/option_pour_filtre_classement"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+    </LinearLayout>
+    <TableLayout
+        android:id="@+id/layout_tableau_scores"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_gravity="center"
-        android:textColor="@color/blanc"
-        android:text="@string/encore_et_encore"
-        android:textSize="20sp"/>
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
+        android:orientation="horizontal">
+
+    </TableLayout>
 </LinearLayout>

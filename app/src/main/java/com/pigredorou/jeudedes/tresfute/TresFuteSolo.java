@@ -141,8 +141,6 @@ public class TresFuteSolo extends AppCompatActivity implements View.OnClickListe
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //System.out.println("TresFute::onCreate()");
-
         // Masque le bar de titre de l'activité
         Objects.requireNonNull(getSupportActionBar()).hide();
 
