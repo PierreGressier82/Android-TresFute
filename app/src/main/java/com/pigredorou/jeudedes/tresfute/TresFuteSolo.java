@@ -781,7 +781,7 @@ public class TresFuteSolo extends AppCompatActivity implements View.OnClickListe
         // Après un click, on met à jour le score
         calcul_score_total();
 
-        // Affiche le score si la partie est terminée
+        // Affiche le score si la partie est terminée et quitte le mode solo
         if (mTour == 7)
             ajoute_score_en_base();
     }
@@ -1131,7 +1131,7 @@ public class TresFuteSolo extends AppCompatActivity implements View.OnClickListe
             nbCases++;
             caseTrouve = caseBleu;
         }
-        // Vert
+        // Vert - Se positionne sur la première case non cochée
         for (index = 1; index < tableauClickVert.length; index++) {
             if (tableauClickVert[index] != 0)
                 break;
@@ -1141,7 +1141,7 @@ public class TresFuteSolo extends AppCompatActivity implements View.OnClickListe
             nbCases++;
             caseTrouve = CasesVertes[index];
         }
-        // Orange
+        // Orange - Se positionne sur la première case vide
         for (index = 1; index < tableauClickOrange.length; index++) {
             if (tableauClickOrange[index] == 0)
                 break;
@@ -1151,7 +1151,7 @@ public class TresFuteSolo extends AppCompatActivity implements View.OnClickListe
             nbCases++;
             caseTrouve = CasesOranges[index];
         }
-        // Violet
+        // Violet - Se positionne sur la première case vide
         for (index = 1; index < tableauClickViolet.length; index++) {
             if (tableauClickViolet[index] == 0)
                 break;
@@ -1167,12 +1167,15 @@ public class TresFuteSolo extends AppCompatActivity implements View.OnClickListe
                 affiche_message_non_autorise();
                 break;
             case 1:
-                if (caseTrouve != null)
+                if (caseTrouve != null) {
                     if (caseTrouve.getCouleur() == BLEU)
                         caseTrouve.onClick(valeurBlanc + valeurBleu);
                     else
                         caseTrouve.onClick(valeurBlanc);
-                retour = true;
+                    retour = true;
+                    caseTrouve.setClickable(false);
+                    mCaseAChoisir = false;
+                }
                 break;
             default:
                 mCaseAChoisir = true;
