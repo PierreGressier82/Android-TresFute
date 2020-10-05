@@ -2,12 +2,15 @@ package com.pigredorou.jeudedes.tresfute;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
+import android.text.InputType;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -785,40 +788,50 @@ public class TresFuteSolo extends AppCompatActivity implements View.OnClickListe
     }
 
     private void ajoute_score_en_base() {
-        String mTitre = "";
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        // Ouvre une instance de la base
-        TresFuteClassementBDD classementDB = new TresFuteClassementBDD(this);
-        TresFuteClassement classement = new TresFuteClassement();
-        DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
-        Date date = new Date();
-        classementDB.open();
-
-        // Enregistre le score en base
-        classement.setScore(mScore);
-        classement.setNom("Pigre");
-        classement.setDate(format.format(date));
-        classement.setNbJoueurs(1);
-        classementDB.insertClassement(classement);
-
-        // Ferme la base
-        classementDB.close();
+        final EditText input = new EditText(this);
         // Oblige a appuyer sur OK
-        builder.setCancelable(false);
+        //builder.setCancelable(false);
         // Affichage du score final
-        builder.setTitle(mTitre)
-                .setMessage("Score final : " + mScore)
-                .setPositiveButton("OK", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        // Bouton OK, prend la couleur "colorAccent"
-                        Intent intent = new Intent();
-                        setResult(RESULT_OK, intent);
-                        finish();
-                    }
-                })
-                .create()
-                .show();
+        input.setInputType(InputType.TYPE_CLASS_TEXT);
+        builder.setView(input);
+        builder.setTitle("Partie Terminée - Score final" + mScore);
+        builder.setMessage("\nPseudo : ");
+        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Ouvre une instance de la base
+                TresFuteClassementBDD classementDB = new TresFuteClassementBDD(getBaseContext());
+                TresFuteClassement classement = new TresFuteClassement();
+                DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+                Date date = new Date();
+                classementDB.open();
+
+                // Enregistre le score en base
+                classement.setScore(mScore);
+                classement.setNom("Pigre");
+                classement.setDate(format.format(date));
+                classement.setNbJoueurs(1);
+                classement.setNom(input.getText().toString());
+                classementDB.insertClassement(classement);
+
+                // Ferme la base
+                classementDB.close();
+
+                // Termine l'activité correctement
+                Intent intent = new Intent();
+                setResult(RESULT_OK, intent);
+                finish();
+            }
+        });
+        builder.setNegativeButton("Annuler", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.cancel();
+            }
+        });
+        builder.create();
+        builder.show();
     }
 
     private void affiche_tour_suivant(int manche) {

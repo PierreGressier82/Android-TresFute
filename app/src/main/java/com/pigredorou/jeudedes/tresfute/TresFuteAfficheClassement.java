@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -15,7 +16,10 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Objects;
 
-import static com.pigredorou.jeudedes.R.*;
+import static com.pigredorou.jeudedes.R.color;
+import static com.pigredorou.jeudedes.R.drawable;
+import static com.pigredorou.jeudedes.R.id;
+import static com.pigredorou.jeudedes.R.layout;
 
 public class TresFuteAfficheClassement extends AppCompatActivity {
     // The database
@@ -30,9 +34,17 @@ public class TresFuteAfficheClassement extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).hide();
 
         setContentView(layout.activity_tres_fute_affiche_classement);
-        TextView textClassement = findViewById(id.classement_complet);
+        ImageView boutonQuitter = findViewById(id.bouton_quitter);
+
+        boutonQuitter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
         // Tout d'abord, il faut détruire tous les éléments contenus dans le layout.
-        TableLayout layoutTableauScores = (TableLayout) findViewById(id.layout_tableau_scores);
+        TableLayout layoutTableauScores = findViewById(id.layout_tableau_scores);
         layoutTableauScores.removeAllViewsInLayout();
 
         // Entête du tableau
@@ -45,26 +57,20 @@ public class TresFuteAfficheClassement extends AppCompatActivity {
 
         if (cursor.moveToFirst()) {
             // The elements to retrieve
-            int colId;
             int score;
             String nom;
             String date;
-            int nbJoueurs;
             int count = 0;
             do {
-                colId = cursor.getInt(0);
                 score = cursor.getInt(1);
                 nom = cursor.getString(2);
                 date = cursor.getString(3);
-                nbJoueurs = cursor.getInt(4);
-                //texteDuClassement += count+1 + " - " + score + " " + nom + " " + date + " " + nbJoueurs + "\n";
                 count++;
                 // Affichage de la ligne
                 ajouteLigneTableau(layoutTableauScores, String.valueOf(count),String.valueOf(score),nom,date);
             } while (cursor.moveToNext());
         }
             else {
-            //texteDuClassement = "Pas de score enregistré";
             Toast.makeText(this, "Pas de score", Toast.LENGTH_LONG).show();
         }
 
@@ -153,10 +159,9 @@ public class TresFuteAfficheClassement extends AppCompatActivity {
 
     public Cursor getClassementTrieParSCore(){
         //Récupère dans un Cursor les valeurs correspondant à un livre contenu dans la BDD (ici on sélectionne le livre grâce à son titre)
-        Cursor c = bdd.query(TresFuteDBOpenHelper.Constants.TABLE_CLASSEMENT, new String[] {TresFuteDBOpenHelper.Constants.COL_ID,
+        return bdd.query(TresFuteDBOpenHelper.Constants.TABLE_CLASSEMENT, new String[] {TresFuteDBOpenHelper.Constants.COL_ID,
                 TresFuteDBOpenHelper.Constants.COL_SCORE, TresFuteDBOpenHelper.Constants.COL_NOM, TresFuteDBOpenHelper.Constants.COL_DATE,
                 TresFuteDBOpenHelper.Constants.COL_NBJ}, null, null, null, null, TresFuteDBOpenHelper.Constants.COL_SCORE + " DESC", "10");
-        return c;
     }
 
 }
