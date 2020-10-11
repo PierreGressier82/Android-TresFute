@@ -79,14 +79,14 @@ public class TresFuteFeuilleScore extends AppCompatActivity implements View.OnCl
         mscoreTotal = findViewById(R.id.score_total);
 
         // Boutons
-        ImageView RAZ = findViewById(R.id.raz);
-        ImageView undo = findViewById(R.id.undo);
+        //ImageView RAZ = findViewById(R.id.raz);
+        //mageView undo = findViewById(R.id.undo);
         ImageView exit = findViewById(R.id.exit);
-        RAZ.setOnClickListener(this);
-        undo.setOnClickListener(this);
+        //RAZ.setOnClickListener(this);
+        //undo.setOnClickListener(this);
         exit.setOnClickListener(this);
-        RAZ.setTag("raz");
-        undo.setTag("undo");
+        //RAZ.setTag("raz");
+        //undo.setTag("undo");
         exit.setTag("exit");
 
         // Definition des couleurs

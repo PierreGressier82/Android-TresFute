@@ -6,25 +6,25 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.provider.BaseColumns;
 
 public class TresFuteDBOpenHelper extends SQLiteOpenHelper {
-    public static class Constants implements BaseColumns {
+    static class Constants implements BaseColumns {
 
-        public static final String DATABASE_NAME = "tresFute.db";
-        public static final int DATABASE_VERSION = 1;
-        public static final String TABLE_CLASSEMENT = "classement";
+        static final String DATABASE_NAME = "tresFute.db";
+        static final int DATABASE_VERSION = 1;
+        static final String TABLE_CLASSEMENT = "classement";
 
         // Noms de colonnes
-        public static final String COL_ID = "_id";
-        public static final String COL_SCORE = "score";
-        public static final String COL_NOM = "nom";
-        public static final String COL_DATE = "date";
-        public static final String COL_NBJ = "nbJoueurs";
+        static final String COL_ID = "_id";
+        static final String COL_SCORE = "score";
+        static final String COL_NOM = "nom";
+        static final String COL_DATE = "date";
+        static final String COL_NBJ = "nbJoueurs";
 
         // Index des colonnes
-        public static final int NUM_COL_ID = 0;
-        public static final int NUM_COL_SCORE = 1;
-        public static final int NUM_COL_NOM = 2;
-        public static final int NUM_COL_DATE = 3;
-        public static final int NUM_COL_NBJ = 4;
+        //public static final int NUM_COL_ID = 0;
+        //public static final int NUM_COL_SCORE = 1;
+        //public static final int NUM_COL_NOM = 2;
+        //public static final int NUM_COL_DATE = 3;
+        //public static final int NUM_COL_NBJ = 4;
     }
 
     private static final String CREATION_TABLE_SCORE = "create table " + Constants.TABLE_CLASSEMENT + " ("
@@ -41,7 +41,7 @@ public class TresFuteDBOpenHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATION_TABLE_SCORE);
-        db.execSQL("INSERT INTO " + Constants.TABLE_CLASSEMENT + " (score,nom,date,nbJoueurs) VALUES (1,'TEST','02/10/2020',1)");
+        //db.execSQL("INSERT INTO " + Constants.TABLE_CLASSEMENT + " (score,nom,date,nbJoueurs) VALUES (1,'TEST','02/10/2020',1)");
     }
 
     @Override

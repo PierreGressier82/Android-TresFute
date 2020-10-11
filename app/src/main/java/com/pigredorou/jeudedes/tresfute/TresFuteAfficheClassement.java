@@ -1,10 +1,7 @@
 package com.pigredorou.jeudedes.tresfute;
 
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteException;
 import android.os.Bundle;
-import android.view.Gravity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TableLayout;
@@ -23,9 +20,7 @@ import static com.pigredorou.jeudedes.R.layout;
 
 public class TresFuteAfficheClassement extends AppCompatActivity {
     // The database
-    private SQLiteDatabase bdd;
-    // The database creator and updater helper
-    TresFuteDBOpenHelper classementDB;
+    private TresFuteClassementBDD classementDB = new TresFuteClassementBDD(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,12 +43,11 @@ public class TresFuteAfficheClassement extends AppCompatActivity {
         layoutTableauScores.removeAllViewsInLayout();
 
         // Entête du tableau
-        ajouteLigneTableau(layoutTableauScores, "Pos", "Score", "Nom", "Date");
+        //ajouteLigneTableau(layoutTableauScores, "Pos", "Score", "Nom", "Date");
 
-        classementDB = new TresFuteDBOpenHelper(this);
         openDB();
 
-        Cursor cursor=getClassementTrieParSCore();
+        Cursor cursor=classementDB.getClassementTrieParSCore(20);
 
         if (cursor.moveToFirst()) {
             // The elements to retrieve
@@ -79,14 +73,20 @@ public class TresFuteAfficheClassement extends AppCompatActivity {
 
     private void ajouteLigneTableau(TableLayout layoutTableauScores, String position, String score, String nom, String date) {
         TableRow ligneTableau = new TableRow(this);
-        TableRow.LayoutParams params = new TableRow.LayoutParams(TableRow.LayoutParams.MATCH_PARENT, TableRow.LayoutParams.MATCH_PARENT);
+        TableRow.LayoutParams params = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, (float) 0.2);
+        TableRow.LayoutParams paramsDate = new TableRow.LayoutParams(0, TableRow.LayoutParams.WRAP_CONTENT, (float) 0.4);
         params.setMargins(2,2,2,2);
-        ligneTableau.setPadding(3,3,3,3);
-        ligneTableau.setGravity(Gravity.CENTER);
+        //ligneTableau.setPadding(3,3,3,3);
+        //ligneTableau.setGravity(Gravity.CENTER);
         ligneTableau.setLayoutParams(params);
 
         // Ajout de la ligne dans le tableau
         layoutTableauScores.addView(ligneTableau);
+
+        //android:layout_width="0dp"
+        //android:layout_height="wrap_content"
+        //android:layout_weight="0.25"
+
 
         // Elements de la ligne
         TextView elementLigne1 = new TextView(this);
@@ -96,27 +96,31 @@ public class TresFuteAfficheClassement extends AppCompatActivity {
         elementLigne1.setBackground(getResources().getDrawable(drawable.bordure_tableau));
         elementLigne1.setTextColor(getResources().getColor(color.blanc));
         elementLigne1.setTextSize(15);
-        elementLigne1.setPadding(2,2,2,2);
+        //elementLigne1.setPadding(2,2,2,2);
         elementLigne1.setLayoutParams(params);
         elementLigne1.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        //elementLigne1.setGravity(View.TEXT_ALIGNMENT_CENTER);
         elementLigne2.setTextColor(getResources().getColor(color.blanc));
         elementLigne2.setTextSize(15);
-        elementLigne2.setPadding(2,2,2,2);
+        //elementLigne2.setPadding(2,2,2,2);
         elementLigne2.setLayoutParams(params);
         elementLigne2.setBackground(getResources().getDrawable(drawable.bordure_tableau));
-        elementLigne2.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_END);
+        elementLigne2.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        //elementLigne2.setGravity(View.TEXT_ALIGNMENT_CENTER);
         elementLigne3.setTextColor(getResources().getColor(color.blanc));
         elementLigne3.setTextSize(15);
-        elementLigne3.setPadding(2,2,2,2);
+        //elementLigne3.setPadding(2,2,2,2);
         elementLigne3.setLayoutParams(params);
         elementLigne3.setBackground(getResources().getDrawable(drawable.bordure_tableau));
-        elementLigne3.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
+        elementLigne3.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        //elementLigne3.setGravity(View.TEXT_ALIGNMENT_CENTER);
         elementLigne4.setTextColor(getResources().getColor(color.blanc));
         elementLigne4.setTextSize(15);
-        elementLigne4.setPadding(2,2,2,2);
-        elementLigne4.setLayoutParams(params);
+        //elementLigne4.setPadding(2,2,2,2);
+        elementLigne4.setLayoutParams(paramsDate);
         elementLigne4.setBackground(getResources().getDrawable(drawable.bordure_tableau));
         elementLigne4.setTextAlignment(View.TEXT_ALIGNMENT_CENTER);
+        //elementLigne4.setGravity(View.TEXT_ALIGNMENT_CENTER);
 
         // Ajout de la case 1 de la ligne
         elementLigne1.setText(position);
@@ -136,7 +140,7 @@ public class TresFuteAfficheClassement extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        openDB();
+       openDB();
     }
 
     @Override
@@ -145,23 +149,11 @@ public class TresFuteAfficheClassement extends AppCompatActivity {
         closeDB();
     }
 
-    public void openDB() throws SQLiteException {
-        try {
-            bdd = classementDB.getWritableDatabase();
-        } catch (SQLiteException ex) {
-            bdd = classementDB.getReadableDatabase();
-        }
+    public void openDB() {
+      classementDB.open();
     }
 
     public void closeDB() {
-        bdd.close();
+        classementDB.close();
     }
-
-    public Cursor getClassementTrieParSCore(){
-        //Récupère dans un Cursor les valeurs correspondant à un livre contenu dans la BDD (ici on sélectionne le livre grâce à son titre)
-        return bdd.query(TresFuteDBOpenHelper.Constants.TABLE_CLASSEMENT, new String[] {TresFuteDBOpenHelper.Constants.COL_ID,
-                TresFuteDBOpenHelper.Constants.COL_SCORE, TresFuteDBOpenHelper.Constants.COL_NOM, TresFuteDBOpenHelper.Constants.COL_DATE,
-                TresFuteDBOpenHelper.Constants.COL_NBJ}, null, null, null, null, TresFuteDBOpenHelper.Constants.COL_SCORE + " DESC", "10");
-    }
-
 }

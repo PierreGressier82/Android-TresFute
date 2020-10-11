@@ -2,7 +2,6 @@ package com.pigredorou.jeudedes.tresfute;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -19,10 +18,9 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.pigredorou.jeudedes.R;
 
-import java.util.Date;
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.Objects;
 
 import static com.pigredorou.jeudedes.tresfute.ImageViewTresFute.BLANC;
@@ -803,7 +801,8 @@ public class TresFuteSolo extends AppCompatActivity implements View.OnClickListe
                 // Ouvre une instance de la base
                 TresFuteClassementBDD classementDB = new TresFuteClassementBDD(getBaseContext());
                 TresFuteClassement classement = new TresFuteClassement();
-                DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+                //DateFormat format = new SimpleDateFormat("dd/MM/yyyy");
+                DateFormat format = DateFormat.getDateInstance();
                 Date date = new Date();
                 classementDB.open();
 
